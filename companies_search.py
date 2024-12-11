@@ -19,7 +19,7 @@ if __name__ == '__main__':
   
     data = pd.read_excel('all_companies.xlsx')
 
-    first_data = data.iloc[1500:2000]
+    first_data = data.iloc[2000:2500]
 
     response = []
 
@@ -39,4 +39,4 @@ if __name__ == '__main__':
     dataframe = pd.DataFrame(response)
 
   
-    dataframe.to_excel('test_first_1500-2000.xlsx', index=False)
+    dataframe.to_excel('test_first_2000-2500.xlsx', index=False)
