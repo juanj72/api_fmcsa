@@ -3,7 +3,7 @@ import pandas as pd
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def fetch_data(usdot):
+def fetch_data(usdot): #TODO refactorizar este script, actualmente al parecer se estan haciendo demasiadas peticiones innecesarias.
     api = api_fmc()
     cargo_carried = ''
     op_carried = ''
