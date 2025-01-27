@@ -230,13 +230,13 @@ class api_fmcsa:
         response = requests.get(endpoint)
         if response.status_code == 200:
             data = response.json()
-            #print(data)
+           
             
             op_carrier=data['content']
             print("-----------------------")
-            #print(cargo_carrier)
+           
             if(len(op_carrier)>0):
-                # Authority=cargo_carrier[0]['carrierAuthority']
+               
                 return op_carrier
             else: return [
                      {
