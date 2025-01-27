@@ -35,7 +35,7 @@ if __name__ == '__main__':
     data_list['cargo_carrier'] = ''
     data_list['operation_classification'] = ''
     
-    with ThreadPoolExecutor(max_workers=10) as executor:  # Adjust max_workers based on your system capability
+    with ThreadPoolExecutor(max_workers=5) as executor:  # Adjust max_workers based on your system capability
         future_to_index = {executor.submit(fetch_data, round(int(row['USDOT']))): index for index, row in data_list.iterrows()}
         
         for future in as_completed(future_to_index):

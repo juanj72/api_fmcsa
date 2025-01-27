@@ -4,6 +4,8 @@ import time
 from urllib.parse import quote
 import os
 from dotenv import load_dotenv
+import logging
+
 
 class api_fmcsa:
     load_dotenv()
@@ -11,6 +13,26 @@ class api_fmcsa:
     
         self.url = os.getenv('URL_API_FMCSA')
         self.web_key=os.getenv('FMCSA_API_KEY')
+        self.logger = logging.getLogger("app_logger")
+        self.logger.setLevel(logging.DEBUG)  # Nivel general del logger
+        
+        # Handler para mensajes generales (INFO y superiores)
+        general_handler = logging.FileHandler("general.log")
+        general_handler.setLevel(logging.INFO)
+        
+        # Handler para errores (WARNING, ERROR, CRITICAL)
+        error_handler = logging.FileHandler("errors.log")
+        error_handler.setLevel(logging.WARNING)
+        
+        # Formato de los logs
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        general_handler.setFormatter(formatter)
+        error_handler.setFormatter(formatter)
+        
+        # Agregar los handlers al logger
+        self.logger.addHandler(general_handler)
+        self.logger.addHandler(error_handler)
+
 
     def get_dot(self,name):
       
@@ -164,8 +186,9 @@ class api_fmcsa:
         endpoint = f'{self.url}/{dot}/cargo-carried?webKey={self.web_key}'
         response = requests.get(endpoint)
         if response.status_code == 200:
+            self.print_logs(dot,response.status_code)
             data = response.json()
-            #print(data)
+            
             
             cargo_carrier=data['content']
             # print("-----------------------")
@@ -179,15 +202,28 @@ class api_fmcsa:
                     "id": {
                         "cargoClassId": None,
                         "dotNumber": None
-                     }}]
-        else: return [
+                     },
+                     'statusCode':response.status_code}]
+        else:
+            self.print_logs(dot,response.status_code)
+            
+            
+            return [
                      {
                     "cargoClassDesc": '',
                     "id": {
                         "cargoClassId": None,
                         "dotNumber": None
-                     }}]
+                     },
+                     'statusCode':response.status_code}
+                     ]
         
+
+    def print_logs(self,dot,status_code):
+        if status_code == 200:
+            self.logger.info(f"La busqueda del DOT: {dot} se realizo con exito")
+        else:
+            self.logger.error(f"La busqueda del DOT: {dot} no se realizo con exito. status code: {status_code}")
         
     def operation_classification(self,dot):
         endpoint = f'{self.url}/{dot}/operation-classification?webKey={self.web_key}'

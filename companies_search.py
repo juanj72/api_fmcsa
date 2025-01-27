@@ -17,15 +17,15 @@ def process_company(dot_number):
 
 if __name__ == '__main__':
   
-    data = pd.read_excel('all_companies.xlsx')
+    data = pd.read_excel('dot_numbers.xlsx')
 
-    first_data = data.iloc[2500:3000]
+    first_data = data
 
     response = []
 
     with ThreadPoolExecutor(max_workers=5) as executor: 
       
-        future_to_dot = {executor.submit(process_company, dot_number): dot_number for dot_number in first_data['US DOT Number ']}
+        future_to_dot = {executor.submit(process_company, dot_number): dot_number for dot_number in first_data['DOT Numbers']}
 
         for future in as_completed(future_to_dot):
             dot_number = future_to_dot[future]
@@ -39,4 +39,4 @@ if __name__ == '__main__':
     dataframe = pd.DataFrame(response)
 
   
-    dataframe.to_excel('test_first_2500-3000.xlsx', index=False)
+    dataframe.to_excel('authority_today.xlsx', index=False)

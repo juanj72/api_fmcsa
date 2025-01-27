@@ -4,3 +4,4 @@
 
 *.~lock.*
 *.env
+venv/
